@@ -7,9 +7,9 @@ import sys
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RES = os.path.join(ROOT, "resultados")
-MOD = os.path.join(ROOT, "modelos")
-LETRA = os.path.join(ROOT, "data", "lletra")
+RESULTS = os.path.join(ROOT, "resultats")
+MOD = os.path.join(ROOT, "models")
+HANDWRITING = os.path.join(ROOT, "data", "lletra")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from preprocessament import preprocess
@@ -17,7 +17,7 @@ from xarxa import Network
 
 
 def main():
-    file_paths = [(d, os.path.join(LETRA, f"lletra_{d}.png")) for d in range(10)]
+    file_paths = [(d, os.path.join(HANDWRITING, f"lletra_{d}.png")) for d in range(10)]
     file_paths = [(d, p) for d, p in file_paths if os.path.exists(p)]
     if not file_paths:
         print("no hi ha cap dibuix a data/lletra/")
@@ -48,13 +48,13 @@ def main():
     for name in networks:
         field_names += [f"cru_{name}", f"conf_cru_{name}",
                    f"net_{name}", f"conf_net_{name}"]
-    os.makedirs(RES, exist_ok=True)
-    with open(os.path.join(RES, "lletra.csv"), "w", newline="", encoding="utf-8") as f:
+    os.makedirs(RESULTS, exist_ok=True)
+    with open(os.path.join(RESULTS, "lletra.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=field_names)
         w.writeheader()
         w.writerows(table_rows)
 
-    np.savez_compressed(os.path.join(RES, "lletra.npz"),
+    np.savez_compressed(os.path.join(RESULTS, "lletra.npz"),
                         digits=np.array([d for d, _ in file_paths]),
                         raw_images=np.stack(raw_images), clean_images=np.stack(clean_images))
 

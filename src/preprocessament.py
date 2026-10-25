@@ -8,8 +8,8 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-RES = os.path.join(ROOT, "resultados")
-LETRA = os.path.join(DATA, "lletra")
+RESULTS = os.path.join(ROOT, "resultats")
+HANDWRITING = os.path.join(DATA, "lletra")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -124,7 +124,7 @@ def prueba():
     raw_images = np.stack(raw_images)
     clean_images = np.stack(clean_images)
 
-    xarxa = Network.load(os.path.join(ROOT, "modelos", "mlp_256_128.npz"))
+    xarxa = Network.load(os.path.join(ROOT, "models", "mlp_256_128.npz"))
     p_raw = xarxa.predict_proba(raw_images.reshape(10, -1))
     p_lim = xarxa.predict_proba(clean_images.reshape(10, -1))
 
@@ -137,8 +137,8 @@ def prueba():
           int((p_raw.argmax(1) == np.arange(10)).sum()), "/",
           int((p_lim.argmax(1) == np.arange(10)).sum()))
 
-    os.makedirs(RES, exist_ok=True)
-    np.savez_compressed(os.path.join(RES, "preprocess_test.npz"),
+    os.makedirs(RESULTS, exist_ok=True)
+    np.savez_compressed(os.path.join(RESULTS, "preprocess_test.npz"),
                         raw_images=raw_images, clean_images=clean_images,
                         proba_raw=p_raw, proba_net=p_lim)
 

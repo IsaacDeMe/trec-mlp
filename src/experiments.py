@@ -14,8 +14,8 @@ from mnist import load_cached
 from xarxa import Network, metrics
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "resultados")
-MODELS = os.path.join(ROOT, "modelos")
+OUT = os.path.join(ROOT, "resultats")
+MODELS = os.path.join(ROOT, "models")
 SEED = 0
 LAYERS = [784, 16, 16, 10]
 

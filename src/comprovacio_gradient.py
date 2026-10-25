@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from xarxa import Network
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "resultados")
+OUT = os.path.join(ROOT, "resultats")
 EPS = 1e-6
 
 

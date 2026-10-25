@@ -14,15 +14,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mnist import load_cached
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RES = os.path.join(ROOT, "resultados")
-FIG = os.path.join(ROOT, "figuras")
-MOD = os.path.join(ROOT, "modelos")
+RESULTS = os.path.join(ROOT, "resultats")
+FIG = os.path.join(ROOT, "figures")
+MOD = os.path.join(ROOT, "models")
 
-AZUL = "#2b6cb0"
-NARANJA = "#c05621"
-VERDE = "#2f855a"
-MORADO = "#6b46c1"
-GRIS = "#718096"
+BLUE = "#2b6cb0"
+ORANGE = "#c05621"
+GREEN = "#2f855a"
+PURPLE = "#6b46c1"
+GRAY = "#718096"
 
 os.makedirs(FIG, exist_ok=True)
 
@@ -39,7 +39,7 @@ def style():
 
 
 def read_csv_rows(name):
-    with open(os.path.join(RES, name), encoding="utf-8") as f:
+    with open(os.path.join(RESULTS, name), encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
@@ -53,7 +53,7 @@ def fig_curves():
     rows = read_csv_rows("curvas.csv")
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.7))
 
-    for act, color in (("sigmoid", NARANJA), ("relu", AZUL)):
+    for act, color in (("sigmoid", ORANGE), ("relu", BLUE)):
         r = [x for x in rows if x["modelo"] == act]
         ep = [int(x["epoca"]) for x in r]
         tr = [float(x["loss_train"]) for x in r]
@@ -134,11 +134,11 @@ def fig_ablation():
     def bars(ax, titulo, data, colores=None):
         labels = [d[0] for d in data]
         valores = [d[1] * 100 for d in data]
-        colores = colores or [AZUL] * len(data)
+        colores = colores or [BLUE] * len(data)
         b = ax.bar(range(len(data)), valores, color=colores, width=0.62)
         ax.set_xticks(range(len(data)))
         ax.set_xticklabels(labels)
-        ax.axhline(10, color=GRIS, ls=":", lw=1)
+        ax.axhline(10, color=GRAY, ls=":", lw=1)
         ax.set_title(titulo)
         ax.set_ylim(0, 100)
         for rect, v in zip(b, valores):
@@ -152,7 +152,7 @@ def fig_ablation():
     lr = [(r["configuracion"], float(r["acc_test"])) for r in rows
           if r["experimento"] == "learning_rate"]
 
-    bars(axes[0], "funció d'activació", act, [NARANJA, AZUL])
+    bars(axes[0], "funció d'activació", act, [ORANGE, BLUE])
     bars(axes[1], "inicialització dels pesos", ini)
     bars(axes[2], "learning rate", lr)
     axes[0].set_ylabel("exactitud al test (%)")
@@ -169,7 +169,7 @@ def fig_data():
     stds = [np.std([float(r["acc_test"]) for r in rows if int(r["n"]) == n]) for n in ns]
 
     fig, ax = plt.subplots(figsize=(5.4, 3.0))
-    ax.errorbar(ns, medias, yerr=stds, color=AZUL, marker="o", ms=4.5,
+    ax.errorbar(ns, medias, yerr=stds, color=BLUE, marker="o", ms=4.5,
                 lw=1.6, capsize=3, label="xarxa 16·16 (mitjana de 3 llavors)")
     ax.set_xscale("log")
     ax.set_xticks(ns)
@@ -187,11 +187,11 @@ def fig_data():
             ax.annotate(f"{y * 100:.1f}%", (x, y), textcoords="offset points",
                         xytext=(0, 9), ha="center", fontsize=7)
 
-    ax.axhline(0.9182, color=NARANJA, ls="--", lw=1.1)
+    ax.axhline(0.9182, color=ORANGE, ls="--", lw=1.1)
     ax.text(ns[0] * 1.1, 0.925, "regressió logística (91,8%)", fontsize=7,
-            color=NARANJA, va="bottom")
-    ax.axhline(0.97, color=VERDE, ls=":", lw=1.2)
-    ax.text(ns[0] * 1.1, 0.974, "kNN (97,0%)", fontsize=7, color=VERDE, va="bottom")
+            color=ORANGE, va="bottom")
+    ax.axhline(0.97, color=GREEN, ls=":", lw=1.2)
+    ax.text(ns[0] * 1.1, 0.974, "kNN (97,0%)", fontsize=7, color=GREEN, va="bottom")
 
     ax.legend(loc="center right", frameon=False)
     fig.tight_layout()
@@ -211,7 +211,7 @@ def fig_robustness():
         r = [x for x in rows if x["tipo"] == key]
         x = [float(v["parametro"]) for v in r]
         y = [float(v["acc"]) for v in r]
-        ax.plot(x, y, color=AZUL, marker="o", ms=3.5, lw=1.5)
+        ax.plot(x, y, color=BLUE, marker="o", ms=3.5, lw=1.5)
         ax.set_title(titulo)
         ax.set_xlabel(xlabel)
         ax.set_ylim(0, 1.0)
@@ -221,13 +221,13 @@ def fig_robustness():
     axes[1].set_xticks([-4, -2, 0, 2, 4])
     axes[2].set_xticks([-20, -10, 0, 10, 20])
     axes[2].text(0.03, 0.06, "3.000 imatges", transform=axes[2].transAxes, fontsize=7,
-                 color=GRIS)
+                 color=GRAY)
     fig.tight_layout()
     save_figure(fig, "f6_robustesa.png")
 
 
 def fig_noise():
-    z = np.load(os.path.join(RES, "soroll.npz"))
+    z = np.load(os.path.join(RESULTS, "soroll.npz"))
     imgs, proba = z["imagenes"], z["proba"]
     table_rows = read_csv_rows("soroll.csv")
 
@@ -244,7 +244,7 @@ def fig_noise():
 
 
 def fig_weights():
-    z = np.load(os.path.join(RES, "pesos.npz"))
+    z = np.load(os.path.join(RESULTS, "pesos.npz"))
     W1 = z["W1"]
     n = W1.shape[1]
     vmax = np.percentile(np.abs(W1), 99.5)
@@ -317,14 +317,14 @@ def digit_grid(raw_images, clean_images, pred_raw, conf_raw, pred_net, conf_net,
 
 
 def fig_preprocess():
-    z = np.load(os.path.join(RES, "preprocess_test.npz"))
+    z = np.load(os.path.join(RESULTS, "preprocess_test.npz"))
     pc, pn = z["proba_cru"], z["proba_net"]
     digit_grid(z["crudos"], z["limpios"], pc.argmax(1), pc.max(1),
                     pn.argmax(1), pn.max(1), list(range(10)), "f9_preprocess.png")
 
 
 def fig_handwriting():
-    z = np.load(os.path.join(RES, "lletra.npz"))
+    z = np.load(os.path.join(RESULTS, "lletra.npz"))
     table_rows = {int(r["digito"]): r for r in read_csv_rows("lletra.csv")}
     digits = [int(d) for d in z["digitos"]]
     pc = np.array([int(table_rows[d]["cru_256"]) for d in digits])
@@ -346,9 +346,9 @@ def main():
     fig_noise()
     fig_weights()
     fig_weights2()
-    if os.path.exists(os.path.join(RES, "preprocess_test.npz")):
+    if os.path.exists(os.path.join(RESULTS, "preprocess_test.npz")):
         fig_preprocess()
-    if os.path.exists(os.path.join(RES, "lletra.npz")):
+    if os.path.exists(os.path.join(RESULTS, "lletra.npz")):
         fig_handwriting()
 
 

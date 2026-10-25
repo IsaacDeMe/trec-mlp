@@ -34,7 +34,7 @@ Cal Python 3.10 o superior. `tkinter` forma part de la instal·lació estàndard
 python executa_tot.py
 ```
 
-El pipeline baixa MNIST si no el troba, entrena els models, calcula les mètriques i genera les figures. Els resultats es desen a `resultados/`, els models a `modelos/` i les figures a `figuras/`.
+El pipeline baixa MNIST si no el troba, entrena els models, calcula les mètriques i genera les figures. Els resultats es desen a `resultats/`, els models a `models/` i les figures a `figures/`.
 
 ## Dades
 
@@ -51,4 +51,4 @@ L'arquitectura del model principal és `[784, 16, 16, 10]`: 784 entrades, dues c
 
 - Els noms dels fitxers són en català; els identificadors del codi són en anglès.
 - Els comentaris `#` s'han eliminat del codi.
-- Les carpetes `data/`, `modelos/`, `resultados/` i `figuras/` no es pugen al repositori.
+- Les carpetes `data/`, `models/`, `resultats/` i `figures/` no es pugen al repositori.

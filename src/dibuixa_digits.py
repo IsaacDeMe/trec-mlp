@@ -8,19 +8,19 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LETRA = os.path.join(ROOT, "data", "lletra")
+HANDWRITING = os.path.join(ROOT, "data", "lletra")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from preprocessament import preprocess
 
-LADO = 560
-GROSOR = 28
+SIDE = 560
+THICKNESS = 28
 
 
 class Board:
     def __init__(self, ventana):
         self.ventana = ventana
         self.digit = tk.IntVar(value=0)
-        self.pil = Image.new("L", (LADO, LADO), 0)
+        self.pil = Image.new("L", (SIDE, SIDE), 0)
         self.dibujo = ImageDraw.Draw(self.pil)
         self.ultimo = None
 
@@ -30,7 +30,7 @@ class Board:
         izq = tk.Frame(ventana, bg="#1a202c")
         izq.pack(side="left", padx=12, pady=12)
 
-        self.canvas = tk.Canvas(izq, width=LADO, height=LADO, bg="black",
+        self.canvas = tk.Canvas(izq, width=SIDE, height=SIDE, bg="black",
                                 highlightthickness=1, highlightbackground="#4a5568",
                                 cursor="crosshair")
         self.canvas.pack()
@@ -92,14 +92,14 @@ class Board:
                 b.config(bg="#2d3748", fg="#e2e8f0")
 
     def dot(self, x, y):
-        r = GROSOR // 2
+        r = THICKNESS // 2
         self.canvas.create_oval(x - r, y - r, x + r, y + r, fill="white", outline="")
         self.dibujo.ellipse([x - r, y - r, x + r, y + r], fill=255)
 
     def line(self, x0, y0, x1, y1):
-        self.canvas.create_line(x0, y0, x1, y1, fill="white", width=GROSOR,
+        self.canvas.create_line(x0, y0, x1, y1, fill="white", width=THICKNESS,
                                 capstyle=tk.ROUND, smooth=True)
-        self.dibujo.line([(x0, y0), (x1, y1)], fill=255, width=GROSOR,
+        self.dibujo.line([(x0, y0), (x1, y1)], fill=255, width=THICKNESS,
                          joint="curve")
         self.dot(x1, y1)
 
@@ -135,14 +135,14 @@ class Board:
         if np.asarray(self.pil).max() == 0:
             self.aviso.config(text="el canvas és buit", fg="#fc8181")
             return
-        os.makedirs(LETRA, exist_ok=True)
+        os.makedirs(HANDWRITING, exist_ok=True)
         d = int(self.digit.get())
-        ruta = os.path.join(LETRA, f"lletra_{d}.png")
+        ruta = os.path.join(HANDWRITING, f"lletra_{d}.png")
         self.pil.save(ruta)
         _, clean_img = preprocess(self.pil)
         self.update_preview(clean_img)
         faltan = [k for k in range(10)
-                  if not os.path.exists(os.path.join(LETRA, f"lletra_{k}.png"))]
+                  if not os.path.exists(os.path.join(HANDWRITING, f"lletra_{k}.png"))]
         if faltan:
             self.aviso.config(text=f"desat el {d}. falten: {faltan}", fg="#68d391")
         else:
@@ -151,7 +151,7 @@ class Board:
 
     def clear(self):
         self.canvas.delete("all")
-        self.pil = Image.new("L", (LADO, LADO), 0)
+        self.pil = Image.new("L", (SIDE, SIDE), 0)
         self.dibujo = ImageDraw.Draw(self.pil)
         self.preview.delete("all")
         self.aviso.config(text="")
