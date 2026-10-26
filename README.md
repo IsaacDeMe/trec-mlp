@@ -1,6 +1,6 @@
-# TREC: xarxa neuronal des de zero
+# TREC part pràctica
 
-Implementació d'un Perceptró Multicapa (MLP) amb NumPy, sense cap framework d'aprenentatge automàtic, per classificar els dígits escrits a mà del conjunt MNIST.
+Implementació d'un Perceptró Multicapa (MLP) amb NumPy per classificar els dígits escrits a mà del conjunt MNIST.
 
 ## Estructura
 
@@ -26,8 +26,6 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Cal Python 3.10 o superior. `tkinter` forma part de la instal·lació estàndard de Python.
-
 ## Execució
 
 ```bash
@@ -47,8 +45,3 @@ Les imatges són de MNIST (LeCun et al., 1998). El codi les baixa del mirall de 
 
 L'arquitectura del model principal és `[784, 16, 16, 10]`: 784 entrades, dues capes ocultes de 16 neurones i 10 sortides. Té 13.002 paràmetres i s'entrena en pocs minuts en CPU.
 
-## Notes
-
-- Els noms dels fitxers són en català; els identificadors del codi són en anglès.
-- Els comentaris `#` s'han eliminat del codi.
-- Les carpetes `data/`, `models/`, `resultats/` i `figures/` no es pugen al repositori.
